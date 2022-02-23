@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="/static/style/new.css">
+<!-- <link rel="stylesheet" href="/static/style/d.js"> -->
+<script src=""https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2pzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<div class='container' ng-cloak ng-app="chatApp">
+  <h1>{{room}} - frozen chat</h1>
+  <div class='chatbox' ng-controller="MessageCtrl as chatMessage">
+    <div class='chatbox__user-list'>
+    </div>
+  </div>
+  <div class="chatbox__messages" ng-repeat="message in messages">
+    <div class="chatbox__messages__user-message">
+      <form id="post-form" method="post">
+        {% csrf_token %}
+        <div class="chatbox__messages__user-message--ind-message">
+          <input type="hidden" name="username" id="username" value="{{username}}">
+          <input type="hidden" name="room_id" id="room_id" value="{{room_details.id">
+          <input type="text" name="message" id="message" width='100px'>
+          <input type="submit" placeholder="Enter your message">
+        </div>
+      </form>
+    </div>
+  </div>
+<script type="text/javascript">
+  $(document).on('submit','#post-form',function(e){
+e.preventDefault();
+
+$.ajax({
+  type:'POST',
+  url:'/send',
+  data:{
+    username:$('#username').val(),
+    room_id:$('#room_id').val(),
+    message:$('#message').val(),
+  csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+  },
+  success:function(data){
+    alert(data)
+  }
+});
+document.getElementById('message').value=''
+  });
+</script>
+</div>
